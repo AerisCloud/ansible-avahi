@@ -27,6 +27,7 @@
     line="disallow-other-stacks=yes"
     insertafter="^\[server\]"
     state=present
+  when: ansible_kernel | version_compare('3.9', '<')
   tags:
     - avahi
     - pkgs
