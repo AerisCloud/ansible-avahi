@@ -1,0 +1,52 @@
+- name: "Ensure avahi is installed"
+  yum: >
+    name={{ item }}
+    state=present
+    enablerepo=epel
+  with_items:
+    - avahi
+    - avahi-tools
+    - avahi-compat-libdns_sd
+    - avahi-compat-libdns_sd-devel
+  tags:
+    - avahi
+    - pkgs
+
+
+# Linux 3.9 added the option SO_REUSEPORT. Avahi-daemon conf defaults to
+# using it, but it's unavailable on CentOS 6.x which is on Linux 2.6.x
+# Therefore, for CentOS 6.x, we will disable it, per solution here:
+# http://dan-project.blog.so-net.ne.jp/2014-06-27
+# In the future, we can remove this section when we move to CentOS 7.x, which
+# uses Linux 3.10.x
+#
+- name: "Disallow avahi-daemon to use SO_REUSEPORT introduced in Linux 3.9"
+  lineinfile: >
+    dest=/etc/avahi/avahi-daemon.conf
+    regexp="^#?disallow-other-stacks="
+    line="disallow-other-stacks=yes"
+    insertafter="^\[server\]"
+    state=present
+  tags:
+    - avahi
+    - pkgs
+
+- name: "Ensure messagebus is running, and starts on boot"
+  service: >
+    name=messagebus
+    state=started
+    enabled=yes
+  when: ansible_distribution_major_version|int == 6
+  tags:
+    - avahi
+    - services
+
+- name: "Ensure dbus is running, and starts on boot"
+  service: >
+    name=dbus
+    state=started
+    enabled=yes
+  when: ansible_distribution_major_version|int > 6
+  tags:
+    - avahi
+    - services

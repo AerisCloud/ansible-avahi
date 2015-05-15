@@ -1,0 +1,6 @@
+# Firewall rules for the 'avahi' role
+*filter
+:avahi_in - [0:0]
+-I INPUT -j avahi_in
+-A avahi_in -p udp -m udp --dport 5353 -j ACCEPT
+COMMIT

@@ -1,0 +1,14 @@
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
+
+- include: debian.yml
+  when: ansible_distribution == 'Debian'
+
+- name: "Ensure avahi-daemon is running, and starts on boot"
+  service: >
+    name=avahi-daemon
+    state=started
+    enabled=yes
+  tags:
+    - avahi
+    - services

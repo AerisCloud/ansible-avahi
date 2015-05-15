@@ -1,0 +1,30 @@
+- name: "Ensure avahi is installed"
+  apt: >
+    name={{ item }}
+    state=present
+  with_items:
+    - avahi-daemon
+    - avahi-utils
+    - avahi-dnsconfd
+    - libavahi-core-dev
+  tags:
+    - avahi
+    - pkgs
+
+# Linux 3.9 added the option SO_REUSEPORT. Avahi-daemon conf defaults to
+# using it, but it's unavailable on CentOS 6.x which is on Linux 2.6.x
+# Therefore, for CentOS 6.x, we will disable it, per solution here:
+# http://dan-project.blog.so-net.ne.jp/2014-06-27
+# In the future, we can remove this section when we move to CentOS 7.x, which
+# uses Linux 3.10.x
+#
+- name: "Disallow avahi-daemon to use SO_REUSEPORT introduced in Linux 3.9"
+  lineinfile: >
+    dest=/etc/avahi/avahi-daemon.conf
+    regexp="^#?disallow-other-stacks="
+    line="disallow-other-stacks=yes"
+    backrefs=yes
+    state=present
+  tags:
+    - avahi
+    - pkgs
