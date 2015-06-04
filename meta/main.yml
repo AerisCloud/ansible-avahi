@@ -21,7 +21,7 @@ dependencies:
         - epel
       centos7:
         - epel
-  - role: firewall
+  - role: aeriscloud.firewall
     role_name: avahi
     tags:
       - avahi
