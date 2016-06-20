@@ -9,20 +9,20 @@ galaxy_info:
       versions:
         - 6
         - 7
-    - name: debian
+    - name: Debian
       versions:
         - wheezy
   categories:
     - system
 dependencies:
-  - role: aeriscloud.repos
+  - role: AerisCloud.repos
     repositories:
       centos6:
         - epel
       centos7:
         - epel
-  - role: aeriscloud.firewall
+  - role: AerisCloud.firewall
     role_name: aeriscloud.avahi
     tags:
       - avahi
-  - role: aeriscloud.yum
+  - role: AerisCloud.yum
