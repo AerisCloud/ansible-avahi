@@ -22,7 +22,7 @@ dependencies:
       centos7:
         - epel
   - role: AerisCloud.firewall
-    caller_name: aeriscloud.avahi
+    caller_name: AerisCloud.avahi
     tags:
       - avahi
   - role: AerisCloud.yum
