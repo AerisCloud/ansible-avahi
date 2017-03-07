@@ -1,0 +1,22 @@
+# Not supported on Amazon but some apps will fail to install without this
+- name: "Ensure avahi is installed"
+  yum: >
+    name={{ item }}
+    state=present
+  with_items:
+    - avahi
+    - avahi-tools
+    - avahi-compat-libdns_sd
+    - avahi-compat-libdns_sd-devel
+  tags:
+    - avahi
+    - pkgs
+
+- name: "Ensure messagebus is running, and starts on boot"
+  service: >
+    name=messagebus
+    state=started
+    enabled=yes
+  tags:
+    - avahi
+    - services
